@@ -7,7 +7,7 @@ from kivy.properties import NumericProperty, ReferenceListProperty,\
 from kivy.vector import Vector
 from kivy.clock import Clock
 from random import randint
-
+#test
 class PongBall(Widget):
     
     velocity_x = NumericProperty(0)
