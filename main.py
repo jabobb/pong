@@ -30,8 +30,7 @@ class PongPaddle(Widget):
             tmp = self.center_y
             self.height *= 0.9
             self.center_y = tmp
-            vel = bounced * 1.3
-            
+            vel = bounced * 1.2
             ball.velocity = vel.x,vel.y + offset
             
 
@@ -46,8 +45,12 @@ class PongGame(Widget):
     def serve_ball(self, vel = Vector(4, 0).rotate(randint(0,360))):
         self.ball.center = self.center
         self.ball.velocity = vel
+
+    def reset_paddles(self):
+        self.player1.height = self.player2.height = 200 
+        self.player1.center_y = self.player2.center_y = self.center_y
+
     def update(self, dt):
-        self.ball.move()
         
         self.player1.bounce_ball(self.ball)
         self.player2.bounce_ball(self.ball)
@@ -58,12 +61,15 @@ class PongGame(Widget):
             
         if self.ball.x < self.x:
             self.player2.score += 1
+            self.reset_paddles()
             self.serve_ball(Vector(4, 0))
     
         if self.ball.right > self.width:
             self.player1.score += 1
+            self.reset_paddles()
             self.serve_ball(Vector(-4, 0))
         
+        self.ball.move()
     def on_touch_move(self,touch):
         if touch.x < self.width / 3:
             self.player1.center_y = touch.y
@@ -74,7 +80,7 @@ class PongApp(App):
     def build(self):
         game = PongGame()
         game.serve_ball()
-        Clock.schedule_interval(game.update, 1.0/120.0)
+        Clock.schedule_interval(game.update, 1.0/60.0)
         return game
     
 if __name__ == '__main__':
